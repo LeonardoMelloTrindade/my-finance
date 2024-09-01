@@ -1,7 +1,7 @@
-import InputLogin from './components/inputsLogin.jsx';
+import { View } from 'react-native';
 
 export default function App() {
   return (
-    <InputLogin />
+    <View></View>
   );
 }
