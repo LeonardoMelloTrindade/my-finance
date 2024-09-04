@@ -1,7 +1,7 @@
-import { View } from 'react-native';
+import RoutesProject from "./routes/routes.js";
 
 export default function App() {
   return (
-    <View></View>
+    <RoutesProject />
   );
 }
