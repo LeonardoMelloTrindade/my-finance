@@ -8,15 +8,13 @@ export default function LoginScreen({ navigation }) {
   return (
     <View style={styles.container_main}>
       <TitleLoginRegister />
-      <View style={styles.container_main_inputs}>
-        <View style={styles.container_inputs}>
-          <View>
+        <View style={styles.container_main_inputs}>
+          <View style={styles.container_inputs}>
             <InputLogin placeholder="Email" />
             <InputLogin placeholder="********" />
-            <Button title="Entrar"/>
+            <Button title="Entrar" />
           </View>
         </View>
-      </View>
     </View>
   );
 }
@@ -25,17 +23,14 @@ const styles = StyleSheet.create({
   container_main: {
     flex: 1,
     alignItems: "center",
-    height: 100,
-    paddingTop: 50,
     backgroundColor: colorsDefault.primary,
   },
   container_main_inputs: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: 785,
+    height: "50%",
+    justifyContent: "flex-start",
   },
   container_inputs: {
-    height: 200,
-    width: 200,
+    width: 250,
+    alignItems: "center",
   },
 });

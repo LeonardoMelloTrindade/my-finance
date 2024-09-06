@@ -8,10 +8,12 @@ export default function InputLogin(props) {
 
 const styles = StyleSheet.create({
     input: {
-        borderWidth: 1,
         marginBottom: 10,
-        borderColor: '#000',
-        borderRadius: 10,
-        paddingLeft: 75
+        backgroundColor: '#fff',
+        fontSize: 20,
+        width: 350,
+        height: 50,
+        borderRadius: 100,
+        paddingLeft: 10
     }
 })
