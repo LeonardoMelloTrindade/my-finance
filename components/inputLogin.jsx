@@ -1,19 +1,21 @@
 import { TextInput, StyleSheet } from "react-native";
 
 export default function InputLogin(props) {
-  const { placeholder } = props;
+  const { placeholder, type } = props;
 
-  return <TextInput style={styles.input} placeholder={placeholder} />;
+  const isPassword = type === "password";
+
+  return <TextInput style={styles.input_global} placeholder={placeholder} textContentType={type} secureTextEntry={isPassword}/>;
 }
 
 const styles = StyleSheet.create({
-    input: {
-        marginBottom: 10,
-        backgroundColor: '#fff',
-        fontSize: 20,
-        width: 350,
-        height: 50,
-        borderRadius: 100,
-        paddingLeft: 10,
-    }
-})
+  input_global: {
+    marginBottom: 10,
+    backgroundColor: "#fff",
+    fontSize: 20,
+    width: 350,
+    height: 50,
+    borderRadius: 100,
+    textAlign: "center",
+  },
+});

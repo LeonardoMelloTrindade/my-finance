@@ -10,8 +10,8 @@ export default function LoginScreen({ navigation }) {
       <TitleLoginRegister />
         <View style={styles.container_main_inputs}>
           <View style={styles.container_inputs}>
-            <InputLogin placeholder="Email" />
-            <InputLogin placeholder="********" />
+            <InputLogin placeholder="Email" type="emailAddress"/>
+            <InputLogin placeholder="********" type="password"/>
             <Button title="Entrar" />
           </View>
         </View>
@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
   },
   container_main_inputs: {
     height: "50%",
-    justifyContent: "flex-start",
   },
   container_inputs: {
     width: 250,
