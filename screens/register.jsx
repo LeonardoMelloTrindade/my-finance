@@ -4,18 +4,16 @@ import TitleLoginRegister from "../components/titleFinanca.jsx";
 import colorsDefault from "../styles/colors.js";
 import InputLogin from "../components/inputLogin.jsx";
 
-export default function LoginScreen({ navigation }) {
+export default function RegisterScreen({ navigation }) {
   return (
     <View style={styles.container_main}>
-      <TitleLoginRegister />
         <View style={styles.container_main_inputs}>
           <View style={styles.container_inputs}>
+            <InputLogin placeholder="Nome" type="givenName"/>
             <InputLogin placeholder="Email" type="emailAddress"/>
-            <InputLogin placeholder="********" type="password"/>
+            <InputLogin placeholder="Senha" type="password"/>
+            <InputLogin placeholder="Repita sua senha" type="password"/>
             <Button title="Entrar" />
-            <Button title="Registrar" 
-            onPress={() => navigation.navigate("Register")}
-            />
           </View>
         </View>
     </View>
