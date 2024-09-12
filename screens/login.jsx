@@ -8,16 +8,23 @@ export default function LoginScreen({ navigation }) {
   return (
     <View style={styles.container_main}>
       <TitleLoginRegister />
-        <View style={styles.container_main_inputs}>
-          <View style={styles.container_inputs}>
-            <InputLogin placeholder="Email" type="emailAddress"/>
-            <InputLogin placeholder="********" type="password"/>
-            <Button title="Entrar" />
-            <Button title="Registrar" 
-            onPress={() => navigation.navigate("Register")}
-            />
+      <View style={styles.container_main_inputs}>
+        <View style={styles.container_inputs}>
+          <InputLogin placeholder="Email" type="emailAddress" />
+          <InputLogin placeholder="********" type="password" />
+          <View style={styles.container_buttons}>
+            <View style={styles.button_wrapper}>
+              <Button title="Entrar" />
+            </View>
+            <View style={styles.button_wrapper}>
+              <Button
+                title="Registrar"
+                onPress={() => navigation.navigate("Register")}
+              />
+            </View>
           </View>
         </View>
+      </View>
     </View>
   );
 }
@@ -34,5 +41,15 @@ const styles = StyleSheet.create({
   container_inputs: {
     width: 250,
     alignItems: "center",
+  },
+  container_buttons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 10,
+  },
+  button_wrapper: {
+    flex: 1,
+    marginHorizontal: 10,
   },
 });
