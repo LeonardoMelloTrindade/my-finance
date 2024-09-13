@@ -1,8 +1,9 @@
 import * as React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import TitleLoginRegister from "../components/titleFinanca.jsx";
 import colorsDefault from "../styles/colors.js";
 import InputLogin from "../components/inputLogin.jsx";
+import ButtonAuth from "../components/buttonAuth.jsx";
 
 export default function LoginScreen({ navigation }) {
   return (
@@ -13,13 +14,22 @@ export default function LoginScreen({ navigation }) {
           <InputLogin placeholder="Email" type="emailAddress" />
           <InputLogin placeholder="********" type="password" />
           <View style={styles.container_buttons}>
-            <View style={styles.button_wrapper}>
-              <Button title="Entrar" />
+            <View>
+              <ButtonAuth
+                type="Registrar"
+                mode="contained"
+                color={colorsDefault.button_register}
+                route="Register"
+                navigation={navigation}
+              />
             </View>
-            <View style={styles.button_wrapper}>
-              <Button
-                title="Registrar"
-                onPress={() => navigation.navigate("Register")}
+            <View>
+              <ButtonAuth
+                type="Entrar"
+                mode="contained"
+                color={colorsDefault.button_login}
+                route="Home"
+                navigation={navigation}
               />
             </View>
           </View>
@@ -44,12 +54,6 @@ const styles = StyleSheet.create({
   },
   container_buttons: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
     marginTop: 10,
-  },
-  button_wrapper: {
-    flex: 1,
-    marginHorizontal: 10,
   },
 });
