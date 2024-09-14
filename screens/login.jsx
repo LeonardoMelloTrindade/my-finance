@@ -28,7 +28,7 @@ export default function LoginScreen({ navigation }) {
                 type="Entrar"
                 mode="contained"
                 color={colorsDefault.button_login}
-                route="Home"
+                route="Menu"
                 navigation={navigation}
               />
             </View>

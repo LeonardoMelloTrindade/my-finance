@@ -1,14 +1,10 @@
 import * as React from "react";
 import { View, Text, Button } from "react-native";
 
-export default function HomeScreen({ navigation }) {
+export default function MenuScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-       <Text>Home Screen</Text>
-      <Button
-        title="Ir para Login"
-        onPress={() => navigation.navigate("Login")}
-      />
+       <Text>Menu Screen</Text>
     </View>
   );
 }
