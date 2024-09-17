@@ -1,9 +1,12 @@
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import { Button } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 import colorsDefault from "../styles/colors";
 
-export default function HeaderMenu({ navigation }) {
+export default function HeaderMenu() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container_header}>
       <View style={styles.container_image_profile}>
@@ -14,7 +17,7 @@ export default function HeaderMenu({ navigation }) {
       </View>
       <View style={styles.container_button_config}>
         <Button
-         onPress={() => navigation.navigate('Register')}
+         onPress={() => navigation.navigate("Login")}
          contentStyle={styles.btn_config}
          icon={() => (
           <Image
@@ -38,15 +41,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container_image_profile: {
-    marginLeft: 20,
+    marginHorizontal: 35,
   },
   container_button_config: {
-    marginRight: 20,
+    marginHorizontal: 15,
   },
   image_profile: {
     width: 50,
     height: 50,
-    borderRadius: 25,
+    borderRadius: 50,
+    backgroundColor: 'white'
+
   },
   btn_config: {
     width: 40,
