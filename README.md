@@ -33,6 +33,7 @@ O projeto também utiliza bibliotecas externas para complementar suas funcionali
 * react-native-reanimated - Biblioteca para animações mais performáticas.
 * react-native-safe-area-context - Tratamento das áreas seguras da tela.
 * react-native-screens - Otimização da navegação baseada em telas.
+* victory-native - Biblioteca de exibir gráficos
 
 ### 🔧 Instalação
 
