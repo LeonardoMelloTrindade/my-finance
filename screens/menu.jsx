@@ -2,8 +2,10 @@ import * as React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import HeaderMenu from "../components/headerMenu";
 import { Button } from "react-native-paper";
+import { VictoryPie } from "victory-native";
 
 export default function MenuScreen({ navigation }) {
+
   return (
     <View style={styles.container}>
       {/* Cabeçalho */}
@@ -11,7 +13,23 @@ export default function MenuScreen({ navigation }) {
 
       {/* Gráfico */}
       <View style={styles.graph}>
-        <Text>oi</Text>
+        <View>
+          <VictoryPie
+            height={200}
+            width={250}
+            data={[
+              { x: "Fixos", y: 50 },
+              { x: "Variáveis", y: 30 },
+              { x: "Totais", y: 50 + 30 },
+            ]}
+            colorScale={["green", "purple", "red"]}
+          />
+        </View>
+        <View>
+          <Text>Gastos Fixos: R$1000,00</Text>
+          <Text>Gastos Totais: R$1500,00</Text>
+          <Text>Gastos Variáveis: R$500,00</Text>
+        </View>
       </View>
 
       {/* Botões de gastos */}
@@ -23,7 +41,7 @@ export default function MenuScreen({ navigation }) {
             mode="contained"
             onPress={() => {}}
             buttonColor="#af5252"
-            >
+          >
             Gastos Fixos
           </Button>
         </View>
@@ -68,15 +86,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6FCFF",
   },
   graph: {
-    alignItems: "center",
-    height: 250,
-    backgroundColor: '#000',
+    height: 200,
+    backgroundColor: "#c0bdbd",
     marginTop: 25,
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingLeft: 5,
+    paddingRight: 5
   },
   expenseButtonsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    
     marginTop: 25,
   },
   expenseButton: {
@@ -87,7 +107,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   adContainer: {
-    width: '100%',
+    width: "100%",
     padding: 20,
     backgroundColor: "#f0f0f0",
     alignItems: "center",
@@ -100,16 +120,16 @@ const styles = StyleSheet.create({
   },
   btn_expenses_totals: {
     width: 400,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   btn_expenses_fixes_variables: {
     width: 180,
     height: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   btnTextStyle: {
     fontSize: 16,
-  }
+  },
 });
