@@ -39,7 +39,7 @@ export default function MenuScreen({ navigation }) {
             contentStyle={styles.btn_expenses_fixes_variables}
             labelStyle={styles.btnTextStyle}
             mode="contained"
-            onPress={() => {}}
+            onPress={() => {navigation.navigate("fixedCosts")}}
             buttonColor="#af5252"
           >
             Gastos Fixos
@@ -50,7 +50,7 @@ export default function MenuScreen({ navigation }) {
             contentStyle={styles.btn_expenses_fixes_variables}
             labelStyle={styles.btnTextStyle}
             mode="contained"
-            onPress={() => {}}
+            onPress={() => {navigation.navigate("variablesCosts")}}
             buttonColor="#af5252"
           >
             Gastos Variáveis
@@ -64,7 +64,7 @@ export default function MenuScreen({ navigation }) {
           contentStyle={styles.btn_expenses_totals}
           labelStyle={styles.btnTextStyle}
           mode="contained"
-          onPress={() => {}}
+          onPress={() => {navigation.navigate("totalCosts")}}
           buttonColor="#af5252"
         >
           Gastos Totais
