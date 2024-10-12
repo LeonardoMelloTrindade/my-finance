@@ -64,6 +64,7 @@ export default function TotalCostsScreen() {
   // Função para renderizar cada item da lista
   const renderItem = ({ item }) => (
     <View style={styles.costItem}>
+      dfdf
       <Text style={styles.costText}>
         {item.description} - R$ {item.value}
       </Text>
@@ -117,7 +118,7 @@ export default function TotalCostsScreen() {
   return (
     <Provider>
       <View style={styles.container}>
-        <Text style={[styles.infoCost, styles.titleCost]}>Gastos Totais:</Text>
+        <Text style={[styles.infoCost, styles.titleCost]}>Despesas:</Text>
         <Text style={[styles.infoCost, styles.costTotal]}>R$ 1.000,00</Text>
 
         {/* Botão para abrir o modal */}

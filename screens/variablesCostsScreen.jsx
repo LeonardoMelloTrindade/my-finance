@@ -24,7 +24,7 @@ export default function VariablesCostsScreen() {
   // Função para adicionar ou editar um gasto
   const handleSaveCost = () => {
     if (!newDescription || !newValue) {
-      Alert.alert("Por favor, preencha a descrição e o valor do gasto.");
+      Alert.alert("Por favor, preencha a descrição e o valor da despesa.");
       return;
     }
 
@@ -102,7 +102,7 @@ export default function VariablesCostsScreen() {
   // Renderiza quando não há gastos
   const renderEmptyList = () => (
     <View style={styles.emptyListContainer}>
-      <Text style={styles.emptyText}>Nenhum gasto adicionado.</Text>
+      <Text style={styles.emptyText}>Nenhuma despesa adicionada.</Text>
     </View>
   );
 
@@ -117,7 +117,7 @@ export default function VariablesCostsScreen() {
   return (
     <Provider>
       <View style={styles.container}>
-        <Text style={[styles.infoCost, styles.titleCost]}>Gastos Variáveis:</Text>
+        <Text style={[styles.infoCost, styles.titleCost]}>Despesas:</Text>
         <Text style={[styles.infoCost, styles.costTotal]}>R$ 1.000,00</Text>
 
         {/* Botão para abrir o modal */}
@@ -159,7 +159,7 @@ export default function VariablesCostsScreen() {
               buttonColor={colorsDefault.primary}
               onPress={handleSaveCost}
             >
-              {editId !== null ? "Salvar Alteração" : "Adicionar Gasto"}
+              {editId !== null ? "Salvar Alteração" : "Adicionar despesa"}
             </PaperButton>
           </Modal>
         </Portal>
