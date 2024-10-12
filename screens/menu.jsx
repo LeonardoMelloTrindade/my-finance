@@ -18,17 +18,15 @@ export default function MenuScreen({ navigation }) {
             height={200}
             width={250}
             data={[
-              { x: "Fixos", y: 50 },
-              { x: "Variáveis", y: 30 },
-              { x: "Totais", y: 50 + 30 },
+              { x: "Despesas", y: 50 },
+              { x: "Entradas", y: 30 },
             ]}
-            colorScale={["green", "purple", "red"]}
+            colorScale={["red", "green"]}
           />
         </View>
         <View>
-          <Text>Gastos Fixos: R$1000,00</Text>
-          <Text>Gastos Totais: R$1500,00</Text>
-          <Text>Gastos Variáveis: R$500,00</Text>
+          <Text>Entradas: R$1000,00</Text>
+          <Text>Despesas: R$500,00</Text>
         </View>
       </View>
 
@@ -39,10 +37,10 @@ export default function MenuScreen({ navigation }) {
             contentStyle={styles.btn_expenses_fixes_variables}
             labelStyle={styles.btnTextStyle}
             mode="contained"
-            onPress={() => {}}
+            onPress={() => {navigation.navigate("fixedCosts")}}
             buttonColor="#af5252"
           >
-            Gastos Fixos
+            Entradas
           </Button>
         </View>
         <View style={styles.expenseButton}>
@@ -50,25 +48,12 @@ export default function MenuScreen({ navigation }) {
             contentStyle={styles.btn_expenses_fixes_variables}
             labelStyle={styles.btnTextStyle}
             mode="contained"
-            onPress={() => {}}
+            onPress={() => {navigation.navigate("variablesCosts")}}
             buttonColor="#af5252"
           >
-            Gastos Variáveis
+            Despesas
           </Button>
         </View>
-      </View>
-
-      {/* Gastos Totais */}
-      <View style={styles.totalExpensesButton}>
-        <Button
-          contentStyle={styles.btn_expenses_totals}
-          labelStyle={styles.btnTextStyle}
-          mode="contained"
-          onPress={() => {}}
-          buttonColor="#af5252"
-        >
-          Gastos Totais
-        </Button>
       </View>
 
       {/* Navegador de telas */}
@@ -87,9 +72,10 @@ const styles = StyleSheet.create({
   },
   graph: {
     height: 200,
-    backgroundColor: "#c0bdbd",
+    backgroundColor: "#f0f0f0",
     marginTop: 25,
     alignItems: 'center',
+    justifyContent: 'space-around',
     flexDirection: 'row',
     paddingLeft: 5,
     paddingRight: 5
