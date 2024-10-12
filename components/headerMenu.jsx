@@ -1,18 +1,20 @@
 import { StyleSheet, View, Image, Text } from "react-native";
 import { Button, IconButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux'; 
 
 import colorsDefault from "../styles/colors";
 
 export default function HeaderMenu() {
   const navigation = useNavigation();
+  const overall = useSelector((state) => state.user.overallBalance)
 
   return (
     <View style={styles.container_header}>
       <View style={styles.topContainer}>
         <View style={styles.container_image_profile}>
           <Image
-            source={require("../assets/icon.png")}
+            source={require("../assets/icon-person.jpg")}
             style={styles.image_profile}
           />
           <Text style={styles.welcomeText}>Olá, bem-vindo!</Text>
@@ -22,7 +24,7 @@ export default function HeaderMenu() {
       {/* Container do saldo geral */}
       <View style={styles.saldoContainer}>
         <Text style={styles.saldoText}>Saldo geral</Text>
-        <Text style={styles.saldoValor}>R$ 1.000,00</Text>
+        <Text style={styles.saldoValor}>R$ {overall}</Text>
       </View>
     </View>
   );

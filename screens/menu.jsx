@@ -3,8 +3,11 @@ import { View, Text, StyleSheet } from "react-native";
 import HeaderMenu from "../components/headerMenu";
 import { Button } from "react-native-paper";
 import { VictoryPie } from "victory-native";
+import { useSelector } from 'react-redux'; 
 
 export default function MenuScreen({ navigation }) {
+  const entradas = useSelector((state) => state.user.downPayment);
+  const despesas = useSelector((state) => state.user.expenses);
 
   return (
     <View style={styles.container}>
@@ -18,15 +21,15 @@ export default function MenuScreen({ navigation }) {
             height={200}
             width={250}
             data={[
-              { x: "Despesas", y: 50 },
-              { x: "Entradas", y: 30 },
+              { x: "Despesas", y: despesas },
+              { x: "Entradas", y: entradas },
             ]}
             colorScale={["red", "green"]}
           />
         </View>
         <View>
-          <Text>Entradas: R$1000,00</Text>
-          <Text>Despesas: R$500,00</Text>
+          <Text>Entradas: R${entradas}</Text>
+          <Text>Despesas: R${despesas}</Text>
         </View>
       </View>
 

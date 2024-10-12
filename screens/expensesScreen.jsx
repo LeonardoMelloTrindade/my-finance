@@ -1,30 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, Alert, StyleSheet } from "react-native";
 import { Modal, Portal, TextInput, Provider, Menu, Divider, IconButton, Button as PaperButton } from "react-native-paper";
 import colorsDefault from "../styles/colors.js";
+import { useSelector, useDispatch } from 'react-redux'; 
+import { setExpenses } from '../store/userSlice.js'; 
 
-export default function TotalCostsScreen() {
+export default function ExpensesScreen() {
   const [modalVisible, setModalVisible] = useState(false);
-  const [costs, setCosts] = useState([]); // Lista de gastos
+  const [costs, setCosts] = useState([]);
   const [newDescription, setNewDescription] = useState("");
   const [newValue, setNewValue] = useState("");
-  const [editId, setEditId] = useState(null); // Usado para verificar se estamos editando
-  const [menuVisible, setMenuVisible] = useState({}); // Controla a visibilidade de cada menu
+  const [editId, setEditId] = useState(null);
+  const [menuVisible, setMenuVisible] = useState({});
+  const dispatch = useDispatch();
+  const despesas = useSelector((state) => state.user.expenses);
 
-  // Função para abrir o menu dropdown de um item específico
+  const calculateTotalCosts = () => {
+    return costs.reduce((total, cost) => total + parseFloat(cost.value), 0);
+  };
+
+  useEffect(() => {
+    const totalCosts = calculateTotalCosts();
+    dispatch(setExpenses(totalCosts));
+  }, [costs, dispatch]);
+
   const openMenu = (id) => {
     setMenuVisible((prevState) => ({ ...prevState, [id]: true }));
   };
 
-  // Função para fechar o menu dropdown de um item específico
   const closeMenu = (id) => {
     setMenuVisible((prevState) => ({ ...prevState, [id]: false }));
   };
 
-  // Função para adicionar ou editar um gasto
   const handleSaveCost = () => {
     if (!newDescription || !newValue) {
-      Alert.alert("Por favor, preencha a descrição e o valor do gasto.");
+      Alert.alert("Por favor, preencha a descrição e o valor da despesa.");
       return;
     }
 
@@ -64,7 +74,6 @@ export default function TotalCostsScreen() {
   // Função para renderizar cada item da lista
   const renderItem = ({ item }) => (
     <View style={styles.costItem}>
-      dfdf
       <Text style={styles.costText}>
         {item.description} - R$ {item.value}
       </Text>
@@ -103,7 +112,7 @@ export default function TotalCostsScreen() {
   // Renderiza quando não há gastos
   const renderEmptyList = () => (
     <View style={styles.emptyListContainer}>
-      <Text style={styles.emptyText}>Nenhum gasto adicionado.</Text>
+      <Text style={styles.emptyText}>Nenhuma despesa adicionada.</Text>
     </View>
   );
 
@@ -119,7 +128,7 @@ export default function TotalCostsScreen() {
     <Provider>
       <View style={styles.container}>
         <Text style={[styles.infoCost, styles.titleCost]}>Despesas:</Text>
-        <Text style={[styles.infoCost, styles.costTotal]}>R$ 1.000,00</Text>
+        <Text style={[styles.infoCost, styles.costTotal]}>R$ {despesas.toFixed(2)}</Text>
 
         {/* Botão para abrir o modal */}
         <PaperButton
@@ -160,7 +169,7 @@ export default function TotalCostsScreen() {
               buttonColor={colorsDefault.primary}
               onPress={handleSaveCost}
             >
-              {editId !== null ? "Salvar Alteração" : "Adicionar Gasto"}
+              {editId !== null ? "Salvar Alteração" : "Adicionar despesa"}
             </PaperButton>
           </Modal>
         </Portal>

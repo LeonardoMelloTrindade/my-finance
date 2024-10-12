@@ -1,35 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, Alert, StyleSheet } from "react-native";
 import { Modal, Portal, TextInput, Provider, Menu, Divider, IconButton, Button as PaperButton } from "react-native-paper";
 import colorsDefault from "../styles/colors.js";
+import { useSelector, useDispatch } from 'react-redux'; 
+import { setDownPayment } from '../store/userSlice.js'; 
 
-export default function VariablesCostsScreen() {
+export default function DownPaymentScreen() {
   const [modalVisible, setModalVisible] = useState(false);
-  const [costs, setCosts] = useState([]); // Lista de gastos
+  const [costs, setCosts] = useState([]);
   const [newDescription, setNewDescription] = useState("");
   const [newValue, setNewValue] = useState("");
-  const [editId, setEditId] = useState(null); // Usado para verificar se estamos editando
-  const [menuVisible, setMenuVisible] = useState({}); // Controla a visibilidade de cada menu
+  const [editId, setEditId] = useState(null);
+  const [menuVisible, setMenuVisible] = useState({});
+  
+  const dispatch = useDispatch();
+  
+  const entradas = useSelector((state) => state.user.downPayment);
 
-  // Função para abrir o menu dropdown de um item específico
+  // Função para calcular o total das entradas
+  const calculateTotalCosts = () => {
+    return costs.reduce((total, cost) => total + parseFloat(cost.value), 0);
+  };
+
+  // Atualiza o valor de downPayment no Redux quando costs muda
+  useEffect(() => {
+    const totalCosts = calculateTotalCosts();
+    dispatch(setDownPayment(totalCosts));
+  }, [costs, dispatch]);
+
   const openMenu = (id) => {
     setMenuVisible((prevState) => ({ ...prevState, [id]: true }));
   };
 
-  // Função para fechar o menu dropdown de um item específico
   const closeMenu = (id) => {
     setMenuVisible((prevState) => ({ ...prevState, [id]: false }));
   };
 
-  // Função para adicionar ou editar um gasto
   const handleSaveCost = () => {
     if (!newDescription || !newValue) {
-      Alert.alert("Por favor, preencha a descrição e o valor da despesa.");
+      Alert.alert("Por favor, preencha a descrição e o valor da entrada.");
       return;
     }
 
     if (editId !== null) {
-      // Editando o gasto existente
       setCosts((prevCosts) =>
         prevCosts.map((cost) =>
           cost.id === editId
@@ -38,16 +51,14 @@ export default function VariablesCostsScreen() {
         )
       );
     } else {
-      // Adicionando um novo gasto
       setCosts([
         ...costs,
-        { id: Date.now().toString(), description: newDescription, value: newValue },
+        { id: Date.now().toString(), description: newDescription, value: parseFloat(newValue).toFixed(2) },
       ]);
     }
-    closeModal(); // Fecha o modal após salvar
+    closeModal();
   };
 
-  // Função para abrir o modal e editar um gasto
   const handleEditCost = (id, description, value) => {
     setNewDescription(description);
     setNewValue(value);
@@ -55,20 +66,17 @@ export default function VariablesCostsScreen() {
     setModalVisible(true); // Abre o modal para edição
   };
 
-  // Função para deletar um gasto
   const handleDeleteCost = (id) => {
     setCosts((prevCosts) => prevCosts.filter((cost) => cost.id !== id));
     closeMenu(id); // Fecha o menu após deletar
   };
 
-  // Função para renderizar cada item da lista
   const renderItem = ({ item }) => (
     <View style={styles.costItem}>
       <Text style={styles.costText}>
         {item.description} - R$ {item.value}
       </Text>
 
-      {/* Menu dropdown para editar/deletar */}
       <Menu
         visible={menuVisible[item.id] || false}
         onDismiss={() => closeMenu(item.id)}
@@ -99,14 +107,12 @@ export default function VariablesCostsScreen() {
     </View>
   );
 
-  // Renderiza quando não há gastos
   const renderEmptyList = () => (
     <View style={styles.emptyListContainer}>
-      <Text style={styles.emptyText}>Nenhuma despesa adicionada.</Text>
+      <Text style={styles.emptyText}>Nenhuma entrada adicionada.</Text>
     </View>
   );
 
-  // Função para fechar o modal
   const closeModal = () => {
     setModalVisible(false);
     setNewDescription(""); // Limpa os campos ao fechar
@@ -117,28 +123,26 @@ export default function VariablesCostsScreen() {
   return (
     <Provider>
       <View style={styles.container}>
-        <Text style={[styles.infoCost, styles.titleCost]}>Despesas:</Text>
-        <Text style={[styles.infoCost, styles.costTotal]}>R$ 1.000,00</Text>
+        <Text style={[styles.infoCost, styles.titleCost]}>Entradas:</Text>
+        {/* Exibe o valor total de entradas atualizadas (downPayment do Redux) */}
+        <Text style={[styles.infoCost, styles.costTotal]}>R$ {entradas.toFixed(2)}</Text>
 
-        {/* Botão para abrir o modal */}
         <PaperButton
           mode="contained"
           style={styles.btnAddCost}
           buttonColor={colorsDefault.primary}
           onPress={() => setModalVisible(true)}
         >
-          + Adicionar gasto
+          + Adicionar entrada
         </PaperButton>
 
-        {/* Lista de gastos */}
         <FlatList
           data={costs}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
-          ListEmptyComponent={renderEmptyList} // Exibe mensagem se a lista estiver vazia
+          ListEmptyComponent={renderEmptyList}
         />
 
-        {/* Modal para adicionar ou editar */}
         <Portal>
           <Modal visible={modalVisible} onDismiss={closeModal} contentContainerStyle={styles.modal}>
             <TextInput
@@ -159,7 +163,7 @@ export default function VariablesCostsScreen() {
               buttonColor={colorsDefault.primary}
               onPress={handleSaveCost}
             >
-              {editId !== null ? "Salvar Alteração" : "Adicionar despesa"}
+              {editId !== null ? "Salvar Alteração" : "Adicionar entrada"}
             </PaperButton>
           </Modal>
         </Portal>

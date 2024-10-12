@@ -1,7 +1,12 @@
 import RoutesProject from "./routes/routes.js";
+import { Provider } from 'react-redux';
+import { store } from './store/store.js';
+
 
 export default function App() {
   return (
-    <RoutesProject />
+    <Provider store={store}>
+      <RoutesProject />
+    </Provider>
   );
 }
