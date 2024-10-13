@@ -1,33 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, FlatList, Alert, StyleSheet } from "react-native";
 import { Modal, Portal, TextInput, Provider, Menu, Divider, IconButton, Button as PaperButton } from "react-native-paper";
 import colorsDefault from "../styles/colors.js";
 import { useSelector, useDispatch } from 'react-redux'; 
-import { setDownPayment } from '../store/userSlice.js'; 
+import { setDownPayment, setListDownPayment } from '../store/userSlice.js'; 
 
 export default function DownPaymentScreen() {
   const [modalVisible, setModalVisible] = useState(false);
-  const [costs, setCosts] = useState([]);
   const [newDescription, setNewDescription] = useState("");
   const [newValue, setNewValue] = useState("");
   const [editId, setEditId] = useState(null);
   const [menuVisible, setMenuVisible] = useState({});
-  
+
   const dispatch = useDispatch();
   
-  const entradas = useSelector((state) => state.user.downPayment);
+  // Obtém a lista de entradas e o valor total do Redux
+  const listDownPayment = useSelector((state) => state.user.listDownPayment);
+  const totalDownPayment = useSelector((state) => state.user.downPayment);
 
-  // Função para calcular o total das entradas
-  const calculateTotalCosts = () => {
-    return costs.reduce((total, cost) => total + parseFloat(cost.value), 0);
-  };
-
-  // Atualiza o valor de downPayment no Redux quando costs muda
-  useEffect(() => {
-    const totalCosts = calculateTotalCosts();
-    dispatch(setDownPayment(totalCosts));
-  }, [costs, dispatch]);
-
+  // Abre o menu de ações para um item
   const openMenu = (id) => {
     setMenuVisible((prevState) => ({ ...prevState, [id]: true }));
   };
@@ -36,47 +27,57 @@ export default function DownPaymentScreen() {
     setMenuVisible((prevState) => ({ ...prevState, [id]: false }));
   };
 
-  const handleSaveCost = () => {
+  // Salva ou edita a entrada no Redux
+  const handleSaveDownPayment = () => {
     if (!newDescription || !newValue) {
       Alert.alert("Por favor, preencha a descrição e o valor da entrada.");
       return;
     }
 
-    if (editId !== null) {
-      setCosts((prevCosts) =>
-        prevCosts.map((cost) =>
-          cost.id === editId
-            ? { ...cost, description: newDescription, value: newValue }
-            : cost
+    const updatedDownPayment = editId !== null
+      ? listDownPayment.map((payment) =>
+          payment.id === editId
+            ? { ...payment, description: newDescription, value: newValue }
+            : payment
         )
-      );
-    } else {
-      setCosts([
-        ...costs,
-        { id: Date.now().toString(), description: newDescription, value: parseFloat(newValue).toFixed(2) },
-      ]);
-    }
-    closeModal();
+      : [...listDownPayment, { id: Date.now().toString(), description: newDescription, value: newValue }];
+
+    // Atualiza o total de entradas e a lista de entradas no Redux
+    const total = updatedDownPayment.reduce((acc, payment) => acc + parseFloat(payment.value), 0);
+    dispatch(setDownPayment(total));
+    dispatch(setListDownPayment(updatedDownPayment));
+
+    closeModal(); // Fecha o modal após salvar
   };
 
-  const handleEditCost = (id, description, value) => {
+  // Função para abrir o modal e editar uma entrada
+  const handleEditDownPayment = (id, description, value) => {
     setNewDescription(description);
     setNewValue(value);
     setEditId(id);
     setModalVisible(true); // Abre o modal para edição
   };
 
-  const handleDeleteCost = (id) => {
-    setCosts((prevCosts) => prevCosts.filter((cost) => cost.id !== id));
+  // Função para deletar uma entrada
+  const handleDeleteDownPayment = (id) => {
+    const updatedDownPayment = listDownPayment.filter((payment) => payment.id !== id);
+    dispatch(setListDownPayment(updatedDownPayment));
+
+    // Atualiza o total de entradas no Redux
+    const total = updatedDownPayment.reduce((acc, payment) => acc + parseFloat(payment.value), 0);
+    dispatch(setDownPayment(total));
+
     closeMenu(id); // Fecha o menu após deletar
   };
 
+  // Função para renderizar cada item da lista
   const renderItem = ({ item }) => (
-    <View style={styles.costItem}>
-      <Text style={styles.costText}>
+    <View style={styles.downPaymentItem}>
+      <Text style={styles.downPaymentText}>
         {item.description} - R$ {item.value}
       </Text>
 
+      {/* Menu dropdown para editar/deletar */}
       <Menu
         visible={menuVisible[item.id] || false}
         onDismiss={() => closeMenu(item.id)}
@@ -90,7 +91,7 @@ export default function DownPaymentScreen() {
       >
         <Menu.Item
           onPress={() => {
-            handleEditCost(item.id, item.description, item.value);
+            handleEditDownPayment(item.id, item.description, item.value);
             closeMenu(item.id);
           }}
           title="Editar"
@@ -98,7 +99,7 @@ export default function DownPaymentScreen() {
         <Divider />
         <Menu.Item
           onPress={() => {
-            handleDeleteCost(item.id);
+            handleDeleteDownPayment(item.id);
             closeMenu(item.id);
           }}
           title="Deletar"
@@ -115,7 +116,7 @@ export default function DownPaymentScreen() {
 
   const closeModal = () => {
     setModalVisible(false);
-    setNewDescription(""); // Limpa os campos ao fechar
+    setNewDescription("");
     setNewValue("");
     setEditId(null);
   };
@@ -123,13 +124,12 @@ export default function DownPaymentScreen() {
   return (
     <Provider>
       <View style={styles.container}>
-        <Text style={[styles.infoCost, styles.titleCost]}>Entradas:</Text>
-        {/* Exibe o valor total de entradas atualizadas (downPayment do Redux) */}
-        <Text style={[styles.infoCost, styles.costTotal]}>R$ {entradas.toFixed(2)}</Text>
+        <Text style={[styles.infoText, styles.titleText]}>Entradas:</Text>
+        <Text style={[styles.infoText, styles.totalText]}>R$ {totalDownPayment.toFixed(2)}</Text>
 
         <PaperButton
           mode="contained"
-          style={styles.btnAddCost}
+          style={styles.btnAddDownPayment}
           buttonColor={colorsDefault.primary}
           onPress={() => setModalVisible(true)}
         >
@@ -137,7 +137,7 @@ export default function DownPaymentScreen() {
         </PaperButton>
 
         <FlatList
-          data={costs}
+          data={listDownPayment}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
           ListEmptyComponent={renderEmptyList}
@@ -161,7 +161,7 @@ export default function DownPaymentScreen() {
             <PaperButton
               mode="contained"
               buttonColor={colorsDefault.primary}
-              onPress={handleSaveCost}
+              onPress={handleSaveDownPayment}
             >
               {editId !== null ? "Salvar Alteração" : "Adicionar entrada"}
             </PaperButton>
@@ -179,30 +179,30 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginTop: 30
   },
-  infoCost: {
+  infoText: {
     fontWeight: "900",
     marginBottom: 10,
   },
-  titleCost: {
+  titleText: {
     fontSize: 20,
   },
-  costTotal: {
+  totalText: {
     fontSize: 18,
   },
-  btnAddCost: {
+  btnAddDownPayment: {
     marginTop: 20,
     marginBottom: 20,
   },
-  costItem: {
+  downPaymentItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: colorsDefault.primary, // Usando paleta de cores
+    backgroundColor: colorsDefault.primary,
     padding: 15,
     marginVertical: 10,
     borderRadius: 8,
   },
-  costText: {
+  downPaymentText: {
     fontSize: 18,
     color: "#fff",
     flex: 1,

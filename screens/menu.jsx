@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import HeaderMenu from "../components/headerMenu";
 import { Button } from "react-native-paper";
 import { VictoryPie } from "victory-native";
-import { useSelector } from 'react-redux'; 
+import { useSelector } from "react-redux";
 
 export default function MenuScreen({ navigation }) {
   const entradas = useSelector((state) => state.user.downPayment);
@@ -11,26 +11,32 @@ export default function MenuScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Cabeçalho */}
       <HeaderMenu />
 
-      {/* Gráfico */}
-      <View style={styles.graph}>
-        <View>
-          <VictoryPie
-            height={200}
-            width={250}
-            data={[
-              { x: "Despesas", y: despesas },
-              { x: "Entradas", y: entradas },
-            ]}
-            colorScale={["red", "green"]}
-          />
-        </View>
-        <View>
-          <Text>Entradas: R${entradas}</Text>
-          <Text>Despesas: R${despesas}</Text>
-        </View>
+      <View style={styles.containerGraph}>
+        {entradas === 0 && despesas === 0 ? (
+          <View>
+            <Text style={styles.emptyText}>
+              Não há dados suficientes para exibir o gráfico.
+            </Text>
+          </View>
+        ) : (
+          <View style={styles.graph}>
+            <VictoryPie
+              height={200}
+              width={250}
+              data={[
+                { x: "Despesas", y: despesas },
+                { x: "Entradas", y: entradas },
+              ]}
+              colorScale={["red", "green"]}
+            />
+            <View>
+              <Text>Entradas: R${entradas}</Text>
+              <Text>Despesas: R${despesas}</Text>
+            </View>
+          </View>
+        )}
       </View>
 
       {/* Botões de gastos */}
@@ -40,7 +46,9 @@ export default function MenuScreen({ navigation }) {
             contentStyle={styles.btn_expenses_fixes_variables}
             labelStyle={styles.btnTextStyle}
             mode="contained"
-            onPress={() => {navigation.navigate("fixedCosts")}}
+            onPress={() => {
+              navigation.navigate("fixedCosts");
+            }}
             buttonColor="#af5252"
           >
             Entradas
@@ -51,7 +59,9 @@ export default function MenuScreen({ navigation }) {
             contentStyle={styles.btn_expenses_fixes_variables}
             labelStyle={styles.btnTextStyle}
             mode="contained"
-            onPress={() => {navigation.navigate("variablesCosts")}}
+            onPress={() => {
+              navigation.navigate("variablesCosts");
+            }}
             buttonColor="#af5252"
           >
             Despesas
@@ -73,15 +83,21 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "#F6FCFF",
   },
-  graph: {
+  containerGraph: {
     height: 200,
     backgroundColor: "#f0f0f0",
     marginTop: 25,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "space-around",
+    flexDirection: "row",
     paddingLeft: 5,
-    paddingRight: 5
+    paddingRight: 5,
+  },
+  graph: {
+    justifyContent: "space-around",
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 5
   },
   expenseButtonsContainer: {
     flexDirection: "row",

@@ -7,6 +7,8 @@ const initialState = {
   expenses: 0,
   downPayment: 0,
   overallBalance: 0,
+  listExpenses: [],
+  listDownPayment: []
 };
 
 const userSlice = createSlice({
@@ -22,6 +24,12 @@ const userSlice = createSlice({
     setPassword: (state, action) => {
       state.password = action.payload;
     },
+    setListDownPayment: (state, action) => {
+      state.listDownPayment = action.payload;
+    },
+    setListExpenses: (state, action) => {
+      state.listExpenses = action.payload;
+    },
     setExpenses: (state, action) => {
       state.expenses = action.payload;
       state.overallBalance = state.downPayment - state.expenses;
@@ -34,6 +42,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setExpenses, setDownPayment, setName, setPassword, setEmail } = userSlice.actions;
+export const { setExpenses, setDownPayment, setName, setPassword, setEmail, setListDownPayment, setListExpenses } = userSlice.actions;
 
 export default userSlice.reducer;

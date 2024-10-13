@@ -1,28 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, FlatList, Alert, StyleSheet } from "react-native";
 import { Modal, Portal, TextInput, Provider, Menu, Divider, IconButton, Button as PaperButton } from "react-native-paper";
 import colorsDefault from "../styles/colors.js";
 import { useSelector, useDispatch } from 'react-redux'; 
-import { setExpenses } from '../store/userSlice.js'; 
+import { setExpenses, setListExpenses } from '../store/userSlice.js'; 
 
 export default function ExpensesScreen() {
   const [modalVisible, setModalVisible] = useState(false);
-  const [costs, setCosts] = useState([]);
-  const [newDescription, setNewDescription] = useState("");
-  const [newValue, setNewValue] = useState("");
+  const [description, setDescription] = useState("");
+  const [value, setValue] = useState("");
   const [editId, setEditId] = useState(null);
   const [menuVisible, setMenuVisible] = useState({});
+
   const dispatch = useDispatch();
-  const despesas = useSelector((state) => state.user.expenses);
-
-  const calculateTotalCosts = () => {
-    return costs.reduce((total, cost) => total + parseFloat(cost.value), 0);
-  };
-
-  useEffect(() => {
-    const totalCosts = calculateTotalCosts();
-    dispatch(setExpenses(totalCosts));
-  }, [costs, dispatch]);
+  
+  const listExpenses = useSelector((state) => state.user.listExpenses);
+  const totalExpenses = useSelector((state) => state.user.expenses);
 
   const openMenu = (id) => {
     setMenuVisible((prevState) => ({ ...prevState, [id]: true }));
@@ -32,53 +25,50 @@ export default function ExpensesScreen() {
     setMenuVisible((prevState) => ({ ...prevState, [id]: false }));
   };
 
-  const handleSaveCost = () => {
-    if (!newDescription || !newValue) {
+  const handleSaveExpense = () => {
+    if (!description || !value) {
       Alert.alert("Por favor, preencha a descrição e o valor da despesa.");
       return;
     }
 
-    if (editId !== null) {
-      // Editando o gasto existente
-      setCosts((prevCosts) =>
-        prevCosts.map((cost) =>
-          cost.id === editId
-            ? { ...cost, description: newDescription, value: newValue }
-            : cost
+    const updatedExpenses = editId !== null
+      ? listExpenses.map((expense) =>
+          expense.id === editId
+            ? { ...expense, description, value }
+            : expense
         )
-      );
-    } else {
-      // Adicionando um novo gasto
-      setCosts([
-        ...costs,
-        { id: Date.now().toString(), description: newDescription, value: newValue },
-      ]);
-    }
-    closeModal(); // Fecha o modal após salvar
+      : [...listExpenses, { id: Date.now().toString(), description, value }];
+
+    const total = updatedExpenses.reduce((acc, expense) => acc + parseFloat(expense.value), 0);
+    dispatch(setExpenses(total));
+    dispatch(setListExpenses(updatedExpenses));
+
+    closeModal();
   };
 
-  // Função para abrir o modal e editar um gasto
-  const handleEditCost = (id, description, value) => {
-    setNewDescription(description);
-    setNewValue(value);
+  const handleEditExpense = (id, description, value) => {
+    setDescription(description);
+    setValue(value);
     setEditId(id);
-    setModalVisible(true); // Abre o modal para edição
+    setModalVisible(true);
   };
 
-  // Função para deletar um gasto
-  const handleDeleteCost = (id) => {
-    setCosts((prevCosts) => prevCosts.filter((cost) => cost.id !== id));
-    closeMenu(id); // Fecha o menu após deletar
+  const handleDeleteExpense = (id) => {
+    const updatedExpenses = listExpenses.filter((expense) => expense.id !== id);
+    dispatch(setListExpenses(updatedExpenses));
+
+    const total = updatedExpenses.reduce((acc, expense) => acc + parseFloat(expense.value), 0);
+    dispatch(setExpenses(total));
+
+    closeMenu(id);
   };
 
-  // Função para renderizar cada item da lista
-  const renderItem = ({ item }) => (
-    <View style={styles.costItem}>
-      <Text style={styles.costText}>
+  const renderExpenseItem = ({ item }) => (
+    <View style={styles.expenseItem}>
+      <Text style={styles.expenseText}>
         {item.description} - R$ {item.value}
       </Text>
 
-      {/* Menu dropdown para editar/deletar */}
       <Menu
         visible={menuVisible[item.id] || false}
         onDismiss={() => closeMenu(item.id)}
@@ -91,83 +81,72 @@ export default function ExpensesScreen() {
         }
       >
         <Menu.Item
-          onPress={() => {
-            handleEditCost(item.id, item.description, item.value);
-            closeMenu(item.id);
-          }}
+          onPress={() => handleEditExpense(item.id, item.description, item.value)}
           title="Editar"
         />
         <Divider />
         <Menu.Item
-          onPress={() => {
-            handleDeleteCost(item.id);
-            closeMenu(item.id);
-          }}
+          onPress={() => handleDeleteExpense(item.id)}
           title="Deletar"
         />
       </Menu>
     </View>
   );
 
-  // Renderiza quando não há gastos
   const renderEmptyList = () => (
     <View style={styles.emptyListContainer}>
       <Text style={styles.emptyText}>Nenhuma despesa adicionada.</Text>
     </View>
   );
 
-  // Função para fechar o modal
   const closeModal = () => {
     setModalVisible(false);
-    setNewDescription(""); // Limpa os campos ao fechar
-    setNewValue("");
+    setDescription("");
+    setValue("");
     setEditId(null);
   };
 
   return (
     <Provider>
       <View style={styles.container}>
-        <Text style={[styles.infoCost, styles.titleCost]}>Despesas:</Text>
-        <Text style={[styles.infoCost, styles.costTotal]}>R$ {despesas.toFixed(2)}</Text>
+        <Text style={[styles.infoText, styles.titleText]}>Despesas:</Text>
+        <Text style={[styles.infoText, styles.totalText]}>R$ {totalExpenses.toFixed(2)}</Text>
 
-        {/* Botão para abrir o modal */}
         <PaperButton
           mode="contained"
-          style={styles.btnAddCost}
+          style={styles.addButton}
           buttonColor={colorsDefault.primary}
           onPress={() => setModalVisible(true)}
         >
           + Adicionar gasto
         </PaperButton>
 
-        {/* Lista de gastos */}
         <FlatList
-          data={costs}
+          data={listExpenses}
           keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          ListEmptyComponent={renderEmptyList} // Exibe mensagem se a lista estiver vazia
+          renderItem={renderExpenseItem}
+          ListEmptyComponent={renderEmptyList}
         />
 
-        {/* Modal para adicionar ou editar */}
         <Portal>
           <Modal visible={modalVisible} onDismiss={closeModal} contentContainerStyle={styles.modal}>
             <TextInput
               label="Descrição"
-              value={newDescription}
-              onChangeText={setNewDescription}
+              value={description}
+              onChangeText={setDescription}
               style={styles.input}
             />
             <TextInput
               label="Valor"
-              value={newValue}
-              onChangeText={setNewValue}
+              value={value}
+              onChangeText={setValue}
               keyboardType="numeric"
               style={styles.input}
             />
             <PaperButton
               mode="contained"
               buttonColor={colorsDefault.primary}
-              onPress={handleSaveCost}
+              onPress={handleSaveExpense}
             >
               {editId !== null ? "Salvar Alteração" : "Adicionar despesa"}
             </PaperButton>
@@ -185,30 +164,30 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginTop: 30
   },
-  infoCost: {
+  infoText: {
     fontWeight: "900",
     marginBottom: 10,
   },
-  titleCost: {
+  titleText: {
     fontSize: 20,
   },
-  costTotal: {
+  totalText: {
     fontSize: 18,
   },
-  btnAddCost: {
+  addButton: {
     marginTop: 20,
     marginBottom: 20,
   },
-  costItem: {
+  expenseItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: colorsDefault.primary, // Usando paleta de cores
+    backgroundColor: colorsDefault.primary,
     padding: 15,
     marginVertical: 10,
     borderRadius: 8,
   },
-  costText: {
+  expenseText: {
     fontSize: 18,
     color: "#fff",
     flex: 1,
