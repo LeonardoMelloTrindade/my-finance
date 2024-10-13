@@ -14,11 +14,9 @@ export default function DownPaymentScreen() {
 
   const dispatch = useDispatch();
   
-  // Obtém a lista de entradas e o valor total do Redux
   const listDownPayment = useSelector((state) => state.user.listDownPayment);
   const totalDownPayment = useSelector((state) => state.user.downPayment);
 
-  // Abre o menu de ações para um item
   const openMenu = (id) => {
     setMenuVisible((prevState) => ({ ...prevState, [id]: true }));
   };
@@ -27,7 +25,6 @@ export default function DownPaymentScreen() {
     setMenuVisible((prevState) => ({ ...prevState, [id]: false }));
   };
 
-  // Salva ou edita a entrada no Redux
   const handleSaveDownPayment = () => {
     if (!newDescription || !newValue) {
       Alert.alert("Por favor, preencha a descrição e o valor da entrada.");
@@ -42,42 +39,36 @@ export default function DownPaymentScreen() {
         )
       : [...listDownPayment, { id: Date.now().toString(), description: newDescription, value: newValue }];
 
-    // Atualiza o total de entradas e a lista de entradas no Redux
     const total = updatedDownPayment.reduce((acc, payment) => acc + parseFloat(payment.value), 0);
     dispatch(setDownPayment(total));
     dispatch(setListDownPayment(updatedDownPayment));
 
-    closeModal(); // Fecha o modal após salvar
+    closeModal();
   };
 
-  // Função para abrir o modal e editar uma entrada
   const handleEditDownPayment = (id, description, value) => {
     setNewDescription(description);
     setNewValue(value);
     setEditId(id);
-    setModalVisible(true); // Abre o modal para edição
+    setModalVisible(true);
   };
 
-  // Função para deletar uma entrada
   const handleDeleteDownPayment = (id) => {
     const updatedDownPayment = listDownPayment.filter((payment) => payment.id !== id);
     dispatch(setListDownPayment(updatedDownPayment));
 
-    // Atualiza o total de entradas no Redux
     const total = updatedDownPayment.reduce((acc, payment) => acc + parseFloat(payment.value), 0);
     dispatch(setDownPayment(total));
 
-    closeMenu(id); // Fecha o menu após deletar
+    closeMenu(id);
   };
 
-  // Função para renderizar cada item da lista
   const renderItem = ({ item }) => (
     <View style={styles.downPaymentItem}>
       <Text style={styles.downPaymentText}>
         {item.description} - R$ {item.value}
       </Text>
-
-      {/* Menu dropdown para editar/deletar */}
+      
       <Menu
         visible={menuVisible[item.id] || false}
         onDismiss={() => closeMenu(item.id)}

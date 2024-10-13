@@ -43,7 +43,7 @@ export default function MenuScreen({ navigation }) {
       <View style={styles.expenseButtonsContainer}>
         <View style={styles.expenseButton}>
           <Button
-            contentStyle={styles.btn_expenses_fixes_variables}
+            style={styles.btn_expenses_fixes_variables}
             labelStyle={styles.btnTextStyle}
             mode="contained"
             onPress={() => {
@@ -56,7 +56,7 @@ export default function MenuScreen({ navigation }) {
         </View>
         <View style={styles.expenseButton}>
           <Button
-            contentStyle={styles.btn_expenses_fixes_variables}
+            style={styles.btn_expenses_fixes_variables}
             labelStyle={styles.btnTextStyle}
             mode="contained"
             onPress={() => {
@@ -131,8 +131,7 @@ const styles = StyleSheet.create({
   btn_expenses_fixes_variables: {
     width: 180,
     height: 200,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent:'center'
   },
   btnTextStyle: {
     fontSize: 16,
