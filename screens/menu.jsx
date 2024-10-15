@@ -4,6 +4,7 @@ import HeaderMenu from "../components/headerMenu";
 import { Button } from "react-native-paper";
 import { VictoryPie } from "victory-native";
 import { useSelector } from "react-redux";
+import colorsDefault from "../styles/colors.js";
 
 export default function MenuScreen({ navigation }) {
   const entradas = useSelector((state) => state.user.downPayment);
@@ -29,7 +30,7 @@ export default function MenuScreen({ navigation }) {
                 { x: "Despesas", y: despesas },
                 { x: "Entradas", y: entradas },
               ]}
-              colorScale={["red", "green"]}
+              colorScale={["#E57373", "#81C784"]}
             />
             <View>
               <Text>Entradas: R${entradas}</Text>
@@ -49,7 +50,7 @@ export default function MenuScreen({ navigation }) {
             onPress={() => {
               navigation.navigate("fixedCosts");
             }}
-            buttonColor="#af5252"
+            buttonColor={colorsDefault.primary}
           >
             Entradas
           </Button>
@@ -62,7 +63,7 @@ export default function MenuScreen({ navigation }) {
             onPress={() => {
               navigation.navigate("variablesCosts");
             }}
-            buttonColor="#af5252"
+            buttonColor={colorsDefault.primary}
           >
             Despesas
           </Button>
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
   },
   btn_expenses_fixes_variables: {
     width: 180,
-    height: 200,
+    height: 60,
     justifyContent:'center'
   },
   btnTextStyle: {

@@ -14,7 +14,7 @@ export default function ButtonAuth(props) {
       {type}
     </Button>
   );
-}
+} 
 
 const styles = StyleSheet.create({
   button_size: {
