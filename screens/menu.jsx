@@ -41,7 +41,6 @@ export default function MenuScreen({ navigation }) {
         )}
       </View>
 
-      {/* Botões de gastos */}
       <View style={styles.expenseButtonsContainer}>
         <View style={styles.expenseButton}>
           <Button
@@ -71,12 +70,8 @@ export default function MenuScreen({ navigation }) {
         </View>
       </View>
 
-      {/* Histórico Unificado */}
       <View style={styles.historyContainer}>
-        {/* Título do Histórico */}
         <Text style={styles.historyTitle}>Histórico</Text>
-
-        {/* Conteúdo do Histórico */}
         <ScrollView style={styles.scrollView}>
           {combinedList.length > 0 ? (
             combinedList.map((item, index) => (
