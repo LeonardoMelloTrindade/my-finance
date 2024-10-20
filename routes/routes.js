@@ -14,11 +14,11 @@ export default function RoutesProject() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Login'>
-        <Stack.Screen name='Login' component={LoginScreen} />
-        <Stack.Screen name='Menu' component={MenuScreen} />
-        <Stack.Screen name='Register' component={RegisterScreen} />
-        <Stack.Screen name='fixedCosts' component={DownPaymentScreen} />
-        <Stack.Screen name='variablesCosts' component={ExpensesScreen} />
+        <Stack.Screen name='Tela de login' component={LoginScreen} />
+        <Stack.Screen name='Tela principal' component={MenuScreen} />
+        <Stack.Screen name='Tela de registro' component={RegisterScreen} />
+        <Stack.Screen name='Tela de entradas' component={DownPaymentScreen} />
+        <Stack.Screen name='Tela de despesas' component={ExpensesScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

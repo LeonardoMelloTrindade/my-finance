@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import HeaderMenu from "../components/headerMenu";
 import { Button } from "react-native-paper";
 import { VictoryPie } from "victory-native";
@@ -9,6 +9,7 @@ import colorsDefault from "../styles/colors.js";
 export default function MenuScreen({ navigation }) {
   const entradas = useSelector((state) => state.user.downPayment);
   const despesas = useSelector((state) => state.user.expenses);
+  const combinedList = useSelector((state) => state.user.combinedList);
 
   return (
     <View style={styles.container}>
@@ -33,8 +34,8 @@ export default function MenuScreen({ navigation }) {
               colorScale={["#E57373", "#81C784"]}
             />
             <View>
-              <Text>Entradas: R${entradas}</Text>
-              <Text>Despesas: R${despesas}</Text>
+              <Text>Entradas: R${entradas.toFixed(2)}</Text>
+              <Text>Despesas: R${despesas.toFixed(2)}</Text>
             </View>
           </View>
         )}
@@ -48,7 +49,7 @@ export default function MenuScreen({ navigation }) {
             labelStyle={styles.btnTextStyle}
             mode="contained"
             onPress={() => {
-              navigation.navigate("fixedCosts");
+              navigation.navigate("Tela de entradas");
             }}
             buttonColor={colorsDefault.primary}
           >
@@ -61,7 +62,7 @@ export default function MenuScreen({ navigation }) {
             labelStyle={styles.btnTextStyle}
             mode="contained"
             onPress={() => {
-              navigation.navigate("variablesCosts");
+              navigation.navigate("Tela de despesas");
             }}
             buttonColor={colorsDefault.primary}
           >
@@ -70,9 +71,25 @@ export default function MenuScreen({ navigation }) {
         </View>
       </View>
 
-      {/* Navegador de telas */}
-      <View style={styles.adContainer}>
-        <Text style={styles.adText}>Faz o L</Text>
+      {/* Histórico Unificado */}
+      <View style={styles.historyContainer}>
+        {/* Título do Histórico */}
+        <Text style={styles.historyTitle}>Histórico</Text>
+
+        {/* Conteúdo do Histórico */}
+        <ScrollView style={styles.scrollView}>
+          {combinedList.length > 0 ? (
+            combinedList.map((item, index) => (
+              <View key={index} style={styles.historyItem}>
+                <Text style={item.type === "entrada" ? styles.entradaText : styles.despesaText}>
+                  {item.description}: R$ {Number(item.value).toFixed(2)} ({item.type === "entrada" ? "Entrada" : "Despesa"})
+                </Text>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.emptyHistory}>Nenhuma entrada ou despesa registrada</Text>
+          )}
+        </ScrollView>
       </View>
     </View>
   );
@@ -98,7 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 5
+    marginHorizontal: 5,
   },
   expenseButtonsContainer: {
     flexDirection: "row",
@@ -108,33 +125,45 @@ const styles = StyleSheet.create({
   expenseButton: {
     width: "40%",
   },
-  totalExpensesButton: {
-    alignItems: "center",
-    marginTop: 20,
-  },
-  adContainer: {
-    width: "100%",
-    padding: 20,
-    backgroundColor: "#f0f0f0",
-    alignItems: "center",
-    position: "absolute",
-    bottom: 0,
-  },
-  adText: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  btn_expenses_totals: {
-    width: 400,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   btn_expenses_fixes_variables: {
     width: 180,
     height: 60,
-    justifyContent:'center'
+    justifyContent: "center",
   },
   btnTextStyle: {
     fontSize: 16,
+  },
+  historyContainer: {
+    flex: 1,
+    marginTop: 20,
+    paddingHorizontal: 15,
+  },
+  historyTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center"
+  },
+  scrollView: {
+    padding: 10,
+  },
+  historyItem: {
+    backgroundColor: "#fff",
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 5,
+    borderColor: "#ddd",
+    borderWidth: 1,
+  },
+  entradaText: {
+    color: "#81C784",
+  },
+  despesaText: {
+    color: "#E57373",
+  },
+  emptyHistory: {
+    textAlign: "center",
+    color: "#888",
+    marginVertical: 10,
   },
 });

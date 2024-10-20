@@ -66,7 +66,7 @@ export default function ExpensesScreen() {
   const renderExpenseItem = ({ item }) => (
     <View style={styles.expenseItem}>
       <Text style={styles.expenseText}>
-        {item.description} - R$ {item.value}
+        {item.description} - R$ {Number(item.value).toFixed(2)}
       </Text>
 
       <Menu
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: "#666",
+    color: "#000000",
   },
   input: {
     marginBottom: 20,

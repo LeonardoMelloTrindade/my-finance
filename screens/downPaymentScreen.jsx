@@ -66,7 +66,7 @@ export default function DownPaymentScreen() {
   const renderItem = ({ item }) => (
     <View style={styles.downPaymentItem}>
       <Text style={styles.downPaymentText}>
-        {item.description} - R$ {item.value}
+        {item.description} - R$ {Number(item.value).toFixed(2)}
       </Text>
       
       <Menu

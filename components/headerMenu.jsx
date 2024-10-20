@@ -21,10 +21,9 @@ export default function HeaderMenu() {
         </View>
       </View>
 
-      {/* Container do saldo geral */}
       <View style={styles.saldoContainer}>
         <Text style={styles.saldoText}>Saldo geral</Text>
-        <Text style={styles.saldoValor}>R$ {overall}</Text>
+        <Text style={styles.saldoValor}>R$ {overall.toFixed(2)}</Text>
       </View>
     </View>
   );
@@ -53,6 +52,7 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 16,
+    color: colorsDefault.text
   },
   topIcons: {
     flexDirection: 'row',
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   saldoContainer: {
-    backgroundColor: '#f0f0f0', // Fundo escuro semelhante ao exemplo
+    backgroundColor: '#f0f0f0',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   saldoValor: {
-    color: '#00AEEF', // Azul para o valor
+    color: '#00AEEF',
     fontSize: 18,
     fontWeight: 'bold',
   },

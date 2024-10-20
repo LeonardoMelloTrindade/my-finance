@@ -1,5 +1,5 @@
 const colorsDefault = {
-    primary: '#64B5F6',
+    primary: '#3E92CC',
     secondary: '#FFD0D0',
     background: '#F6FCFF',
     text: '#2D2D2D',

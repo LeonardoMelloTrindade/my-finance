@@ -19,7 +19,7 @@ export default function LoginScreen({ navigation }) {
                 type="Registrar"
                 mode="contained"
                 color={colorsDefault.button_register}
-                route="Register"
+                route="Tela de registro"
                 navigation={navigation}
               />
             </View>
@@ -28,7 +28,7 @@ export default function LoginScreen({ navigation }) {
                 type="Entrar"
                 mode="contained"
                 color={colorsDefault.button_login}
-                route="Menu"
+                route="Tela principal"
                 navigation={navigation}
               />
             </View>

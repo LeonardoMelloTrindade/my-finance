@@ -8,7 +8,8 @@ const initialState = {
   downPayment: 0,
   overallBalance: 0,
   listExpenses: [],
-  listDownPayment: []
+  listDownPayment: [],
+  combinedList: []
 };
 
 const userSlice = createSlice({
@@ -25,10 +26,22 @@ const userSlice = createSlice({
       state.password = action.payload;
     },
     setListDownPayment: (state, action) => {
-      state.listDownPayment = action.payload;
+      state.listDownPayment = action.payload.map(item => ({
+        ...item,
+        type: 'entrada',
+        date: item.date || new Date().toISOString() 
+      }));
+      state.combinedList = [...state.listDownPayment, ...state.listExpenses];
+      state.combinedList.sort((a, b) => new Date(b.date) - new Date(a.date));
     },
     setListExpenses: (state, action) => {
-      state.listExpenses = action.payload;
+      state.listExpenses = action.payload.map(item => ({
+        ...item,
+        type: 'despesa', 
+        date: item.date || new Date().toISOString() 
+      }));
+      state.combinedList = [...state.listDownPayment, ...state.listExpenses];
+      state.combinedList.sort((a, b) => new Date(b.date) - new Date(a.date));
     },
     setExpenses: (state, action) => {
       state.expenses = action.payload;
@@ -38,7 +51,6 @@ const userSlice = createSlice({
       state.downPayment = action.payload;
       state.overallBalance = state.downPayment - state.expenses;
     },
-    
   },
 });
 
