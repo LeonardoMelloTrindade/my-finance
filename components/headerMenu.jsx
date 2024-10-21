@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   saldoText: {
-    color: '#999',
+    color: colorsDefault.text,
     fontSize: 16,
   },
   saldoValor: {

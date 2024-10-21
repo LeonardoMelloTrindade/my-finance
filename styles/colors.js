@@ -2,9 +2,11 @@ const colorsDefault = {
     primary: '#3E92CC',
     secondary: '#FFD0D0',
     background: '#F6FCFF',
-    text: '#2D2D2D',
-    button_login: '#1D87F1',
-    button_register: '#33B133'
+    text: '#1E1B18',
+    button_login: '#FF6F61',
+    button_register: '#33B133',
+    downPayment: '#81C784',
+    expenses: '#E57373' 
 };
 
 export default colorsDefault;

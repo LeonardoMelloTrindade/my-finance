@@ -31,7 +31,7 @@ export default function MenuScreen({ navigation }) {
                 { x: "Despesas", y: despesas },
                 { x: "Entradas", y: entradas },
               ]}
-              colorScale={["#E57373", "#81C784"]}
+              colorScale={[`${colorsDefault.expenses}`, `${colorsDefault.downPayment}`]}
             />
             <View>
               <Text>Entradas: R${entradas.toFixed(2)}</Text>
@@ -110,15 +110,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 5,
   },
   expenseButtonsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 25,
-  },
-  expenseButton: {
-    width: "40%",
   },
   btn_expenses_fixes_variables: {
     width: 180,
@@ -151,14 +147,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   entradaText: {
-    color: "#81C784",
+    color: colorsDefault.downPayment
   },
   despesaText: {
-    color: "#E57373",
+    color: colorsDefault.expenses
   },
   emptyHistory: {
     textAlign: "center",
-    color: "#888",
+    color: colorsDefault.text,
     marginVertical: 10,
   },
 });
